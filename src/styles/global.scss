@@ -1,0 +1,11 @@
+@import "variables";
+html {
+  font-family: $font-roboto;
+}
+body {
+  padding: 25px 0;
+}
+.wrapper {
+  width: 1280px;
+  margin: 0 auto;
+}

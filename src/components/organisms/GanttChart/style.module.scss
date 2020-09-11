@@ -1,0 +1,58 @@
+@import "../../../styles/variables";
+.container {
+  width: 100%;
+  min-height: 650px;
+  position: relative;
+  display: flex;
+  overflow: scroll;
+  z-index: 1;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  flex-direction: column;
+}
+.axis {
+  position: absolute;
+  background-color: $color-chart-item;
+  z-index: 1;
+}
+.axisX {
+  width: calc(100% - 10px);
+  height: 2px;
+  bottom: 0;
+  &:before {
+    content: "";
+    position: absolute;
+    right: -15px;
+    bottom: -5px;
+    border: 6px solid transparent;
+    border-left: 9px solid $color-chart-item;
+    z-index: 2;
+  }
+}
+.axisY {
+  height: calc(100% - 10px);
+  width: 2px;
+  bottom: 0;
+  z-index: 2;
+  &:before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: -15px;
+    border: 6px solid transparent;
+    border-bottom: 9px solid $color-chart-item;
+    z-index: 2;
+  }
+}
+.list{
+  width: 100%;
+  height: 100%;
+}
+.line{
+  display: flex;
+  align-items: center;
+}
+
+.content{
+  position: relative;
+}
