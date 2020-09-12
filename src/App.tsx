@@ -8,7 +8,7 @@ function App() {
       <GanttChart
         height={650}
         data={inputMock}
-        config={{ dayStep: 30, itemHeight: 20, lineHeight: 35,debugSvgLayerMode:true }}
+        config={{ maxDay:55, dayStep: 30, itemHeight: 20, lineHeight: 35,debugSvgLayerMode:true }}
       />
     </main>
   );

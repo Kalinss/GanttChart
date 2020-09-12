@@ -22,7 +22,6 @@ export const GanttChartHeader: React.FC<GanttChartHeaderType> = ({
 }) => {
   return (
     <header
-      style={{ width: step * (zeroDayConfig!.maxDay+1) }}
       className={style.header}
     >
       {type === "zeroDay" && (

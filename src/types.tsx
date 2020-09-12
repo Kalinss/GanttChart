@@ -13,6 +13,7 @@ export type GanttChartConfigType = {
     dayStep: number; // px
     itemHeight: number; // px
     debugSvgLayerMode: boolean;
+    maxDay:number;
 };
 export type GanttChartPositionItemType = {
     top: number;

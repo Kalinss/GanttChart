@@ -1,4 +1,3 @@
-
 export type data = {
   id: string;
   name: string;
@@ -7,6 +6,34 @@ export type data = {
   dependencies: string[]; // ['id','id',...]
 };
 export const inputMock = [
+  {
+    id: "doc55",
+    name: "Тест док1",
+    start: 20,
+    duration: 14,
+    dependencies: [],
+  },
+  {
+    id: "task55",
+    name: "Тест1",
+    start: 3,
+    duration: 6,
+    dependencies: ["doc55"],
+  },
+  {
+    id: "task66",
+    name: "Тест2",
+    start: 3,
+    duration: 6,
+    dependencies: ["doc66"],
+  },
+  {
+    id: "doc66",
+    name: "Тест док2",
+    start: 20,
+    duration: 14,
+    dependencies: [],
+  },
   {
     id: "task1",
     name: "Задание 5.7 для 5.1",
@@ -19,7 +46,7 @@ export const inputMock = [
     name: "Документация 5.1",
     start: 20,
     duration: 14,
-    dependencies: ['doc4'],
+    dependencies: ["doc4"],
   },
   {
     id: "task2",
@@ -33,42 +60,42 @@ export const inputMock = [
     name: "Задание 5.2 для 5.1",
     start: 12,
     duration: 8,
-    dependencies: ["doc1",'doc2'],
+    dependencies: ["doc1", "doc2"],
   },
   {
     id: "doc2",
     name: "Документация 5.2",
     start: 20,
     duration: 10,
-    dependencies: ['doc4'],
+    dependencies: ["doc4"],
   },
   {
     id: "task5",
     name: "Задание 5.2 для 5.3",
     start: 12,
     duration: 8,
-    dependencies: ['doc3'],
+    dependencies: ["doc3"],
   },
   {
     id: "task3",
     name: "Задание 5.7 для 5.3",
     start: 3,
     duration: 6,
-    dependencies: ['doc3'],
+    dependencies: ["doc3"],
   },
   {
     id: "doc3",
     name: "Документация 5.3",
     start: 20,
     duration: 10,
-    dependencies: ['doc4'],
+    dependencies: ["doc4"],
   },
   {
     id: "doc4",
     name: "Документация 5.7",
     start: 34,
     duration: 10,
-    dependencies: ['doc5'],
+    dependencies: ["doc5"],
   },
   {
     id: "doc5",
