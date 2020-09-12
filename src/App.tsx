@@ -2,13 +2,27 @@ import React, { useReducer } from "react";
 import { GanttChart } from "./components/organisms/GanttChart";
 import { inputMock } from "./data/inputMock";
 import { reducer } from "./reducers/reducer";
-import action from './reducers/constants'
+import action from "./reducers/constants";
 function App() {
   const [state, dispatch] = useReducer(reducer, inputMock);
 
   return (
     <main className="wrapper">
       <GanttChart
+        rightPullEvent={(id, value) => {
+          dispatch({
+            type: action.changeDuration,
+            id: id,
+            durationValue: value,
+          });
+        }}
+        leftPullEvent={(id, value) => {
+            dispatch({
+            type: action.changeStartDay,
+            id: id,
+            startValue: value,
+          });
+        }}
         height={650}
         data={state}
         config={{

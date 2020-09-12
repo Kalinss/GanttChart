@@ -5,6 +5,7 @@ type actionType = {
   type: string;
   id: string;
   durationValue?: number;
+  startValue?: number;
 };
 type updateObjectInCollection = (
   obj: GanttChartObjectType
@@ -15,7 +16,6 @@ type updateCollectionByIdType = (
   id: string,
   fn: updateObjectInCollection
 ) => GanttChartDataType;
-
 
 const updateCollectionById: updateCollectionByIdType = (collection, id, fn) => {
   return collection.reduce((acc, item) => {
@@ -30,7 +30,10 @@ const changeDuration = (value: number) => (obj: GanttChartObjectType) => ({
   ...obj,
   duration: value,
 });
-
+const changeStart = (value: number) => (obj: GanttChartObjectType) => ({
+  ...obj,
+  start: value,
+});
 
 export const reducer = (state: GanttChartDataType, action: actionType) => {
   switch (action.type) {
@@ -39,6 +42,12 @@ export const reducer = (state: GanttChartDataType, action: actionType) => {
         state,
         action.id,
         changeDuration(action.durationValue!)
+      );
+    case C.changeStartDay:
+      return updateCollectionById(
+        state,
+        action.id,
+        changeStart(action.startValue!)
       );
     default:
       return state;

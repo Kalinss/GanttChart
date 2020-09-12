@@ -50,7 +50,6 @@ export const createPathMap = (
   const paths: string[] = [];
   data.map((from) => {
     from.dependencies!.map((to) => {
-      console.log(to);
       const fromPosition = positions.get(from.id);
       const toPosition = positions.get(to);
       paths.push(

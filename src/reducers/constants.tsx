@@ -1,3 +1,4 @@
 export default {
-    changeDuration :"CHANGE_DURATION"
+    changeDuration :"CHANGE_DURATION",
+    changeStartDay :"CHANGE_START"
 }
