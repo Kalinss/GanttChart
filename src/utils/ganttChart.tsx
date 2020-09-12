@@ -4,7 +4,7 @@ import {
   GanttChartItemPositionMapType,
   GanttChartPositionItemType,
 } from "../types";
-import {zigZagPattern,gPattern} from "./ganttChartArrowPatterns";
+import {bottomToLeftPattern} from "./ganttChartArrowPatterns";
 
 export const createPositionMap = (
   data: GanttChartDataType,
@@ -34,12 +34,12 @@ export const createPath = (
   from: GanttChartPositionItemType,
   to: GanttChartPositionItemType
 ) => {
-  if(from.left + from.width >= to.left ){
-    return zigZagPattern(from,to);
-  }else{
-    return gPattern(from,to);
-  }
-  // return gPattern(from,to);
+  // if(from.left + from.width >= to.left ){
+  //   return zigZagPattern(from,to);
+  // }else{
+  //   return gPattern(from,to);
+  // }
+   return bottomToLeftPattern(from,to);
 
 };
 
