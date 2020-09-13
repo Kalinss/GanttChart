@@ -34,6 +34,10 @@ const changeStart = (value: number) => (obj: GanttChartObjectType) => ({
   ...obj,
   start: value,
 });
+const createDocumentation =(obj:GanttChartObjectType)=>({
+    ...obj,
+    isReady:true
+})
 
 export const reducer = (state: GanttChartDataType, action: actionType) => {
   switch (action.type) {
@@ -48,6 +52,12 @@ export const reducer = (state: GanttChartDataType, action: actionType) => {
         state,
         action.id,
         changeStart(action.startValue!)
+      );
+    case C.createDocumentation:
+      return updateCollectionById(
+          state,
+          action.id,
+          createDocumentation
       );
     default:
       return state;

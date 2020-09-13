@@ -3,7 +3,10 @@ export type GanttChartObjectType = {
     name: string;
     start: number; // 'YYYY-MM-DD'
     duration: number; // 'YYYY-MM-DD'
-    dependencies?: string[]; // ['id','id',...]
+    dependencies: string[]; // ['id','id',...]
+    parentTasks:string[]; // ['id','id',...]
+    isReady:boolean;
+    isTask:boolean
 }
 
 export type GanttChartDataType = GanttChartObjectType[];
@@ -23,6 +26,6 @@ export type GanttChartPositionItemType = {
     height: number;
     width: number;
 };
-export type GanttChartArrowsPathType = string[]
+export type GanttChartArrowsPathType = string[][]
 export type GanttChartItemPositionMapType = Map<string,
     GanttChartPositionItemType>;

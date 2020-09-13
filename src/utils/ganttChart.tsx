@@ -4,7 +4,7 @@ import {
   GanttChartItemPositionMapType,
   GanttChartPositionItemType,
 } from "../types";
-import {bottomToLeftPattern} from "./ganttChartArrowPatterns";
+import { bottomToLeftPattern } from "./ganttChartArrowPatterns";
 
 export const createPositionMap = (
   data: GanttChartDataType,
@@ -34,28 +34,44 @@ export const createPath = (
   from: GanttChartPositionItemType,
   to: GanttChartPositionItemType
 ) => {
-  // if(from.left + from.width >= to.left ){
-  //   return zigZagPattern(from,to);
-  // }else{
-  //   return gPattern(from,to);
-  // }
-   return bottomToLeftPattern(from,to);
-
+  return bottomToLeftPattern(from, to);
 };
 
 export const createPathMap = (
   data: GanttChartDataType,
   positions: GanttChartItemPositionMapType
-) => {
-  const paths: string[] = [];
+): string[][] => {
+  const paths: string[][] = [];
   data.map((from) => {
     from.dependencies!.map((to) => {
       const fromPosition = positions.get(from.id);
       const toPosition = positions.get(to);
-      paths.push(
-        createPath(fromPosition!,toPosition!).join(" ")
-      );
+      paths.push([from.id, createPath(fromPosition!, toPosition!).join(" ")]);
     });
   });
   return paths;
+};
+
+export const getDependenciesById = (
+  data: GanttChartDataType,
+  id: string
+): GanttChartDataType | [] => {
+  const object = data.find((item) => item.id === id);
+  const dependenciesList = object!.dependencies;
+  if (!dependenciesList!.length) return [];
+  return dependenciesList.map((item) => {
+    return data.find((obj) => obj.id === item)!;
+  });
+};
+
+export const getParentTasksById = (
+  data: GanttChartDataType,
+  id: string
+): GanttChartDataType | [] => {
+  const object = data.find((item) => item.id === id);
+  const parentTasks = object!.parentTasks;
+  if (!parentTasks!.length) return [];
+  return parentTasks.map((item) => {
+    return data.find((obj) => obj.id === item)!;
+  });
 };

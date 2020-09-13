@@ -10,6 +10,7 @@ export type ChartTaskData = {
   duration: number;
   id: string;
   startDay: number;
+  clickHandler?: (id: string) => void;
 };
 
 export type pullEventType = (id: string, xPos: number) => void;
@@ -22,9 +23,11 @@ export const ChartTask: React.FC<ChartTaskData> = ({
   duration,
   startDay,
   id,
+  clickHandler = () => {},
 }) => {
   return (
     <div
+      onClick ={()=>{clickHandler(id)}}
       style={{ transform: `translateX(${startPosition}px)` }}
       className={style.chartTask}
     >

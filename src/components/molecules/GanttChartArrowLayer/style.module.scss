@@ -1,21 +1,24 @@
 @import "../../../styles/variables";
-.layer{
+.layer {
   width: 100%;
   position: absolute;
   left: 0;
   top: 0;
   height: 100%;
-  & svg{
+  & svg {
     width: 100%;
     height: 100%;
-
   }
 }
-.arrow{
+.arrow {
+  position: relative;
   fill: none;
   stroke-linecap: round;
   stroke-width: 2px;
   stroke-linejoin: round;
   stroke: $color-arrow;
+}
 
+.active{
+  stroke: #210015;
 }

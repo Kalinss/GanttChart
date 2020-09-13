@@ -3,6 +3,8 @@ import { GanttChart } from "./components/organisms/GanttChart";
 import { inputMock } from "./data/inputMock";
 import { reducer } from "./reducers/reducer";
 import action from "./reducers/constants";
+import { GanttChartTaskInfoBox } from "./components/molecules/GanttChartTaskInfoBox";
+
 function App() {
   const [state, dispatch] = useReducer(reducer, inputMock);
 
@@ -17,10 +19,16 @@ function App() {
           });
         }}
         leftPullEvent={(id, value) => {
-            dispatch({
+          dispatch({
             type: action.changeStartDay,
             id: id,
             startValue: value,
+          });
+        }}
+        createDocument={(id) => {
+          dispatch({
+            type: action.createDocumentation,
+            id: id,
           });
         }}
         height={650}

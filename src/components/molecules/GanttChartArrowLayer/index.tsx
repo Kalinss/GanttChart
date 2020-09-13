@@ -1,43 +1,32 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import style from "./style.module.scss";
 import {
   GanttChartArrowsPathType,
   GanttChartPositionItemType,
 } from "../../../types";
+import classNames from "classnames";
 
 export type GanttChartArrowLayerType = {
   paths: GanttChartArrowsPathType;
-  debugMode: boolean;
-  positionItems: Map<string, GanttChartPositionItemType>;
+  activeId?: string;
 };
 
 export const GanttChartArrowLayer: React.FC<GanttChartArrowLayerType> = ({
   paths,
-  positionItems,
-  debugMode,
+  activeId = "",
 }) => {
-  const positions = Array.from(positionItems.values());
-  // const paths = createPathMap()
   return (
     <div className={style.layer}>
-      <svg>
-        {paths.map((path) => (
-          <polyline
-            className={style.arrow}
-            points={path}
-            stroke={"red"}
-          />
+      <svg xmlns="http://www.w3.org/2000/svg">
+        {paths!.map((path) => (
+            <polyline
+              id={path[0] === activeId ? 'activeLine':'line'}
+              className={classNames(style.arrow, path[0] === activeId && style.active)}
+              points={path[path.length - 1]!}
+            />
+
         ))}
-        {/*{debugMode && (*/}
-        {/*  <g>*/}
-        {/*    {positions.map((item) => (*/}
-        {/*      <circle cx={item.left} cy={item.middleHeight} r={4} />*/}
-        {/*    ))}*/}
-        {/*    {positions.map((item) => (*/}
-        {/*      <circle cx={item.middleWidth} cy={item.top} r={4} />*/}
-        {/*    ))}*/}
-        {/*  </g>*/}
-        {/*)}*/}
+        <use xlinkHref="#activeLine"/>
       </svg>
     </div>
   );

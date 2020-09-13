@@ -3,9 +3,15 @@ import style from "./style.module.scss";
 import { ChartTask } from "../../atoms/ChartTask";
 import { GanttChartHeader } from "../../molecules/GanttChartHeader";
 import { GanttChartArrowLayer } from "../../molecules/GanttChartArrowLayer";
-import { GanttChartConfigType, GanttChartDataType } from "../../../types";
+import {
+  GanttChartConfigType,
+  GanttChartDataType,
+  GanttChartObjectType,
+} from "../../../types";
 import { GanttChartPullItems } from "./GanttChartPullItems";
 import { createPathMap, createPositionMap } from "../../../utils/ganttChart";
+import { GanttChartTaskInfoBox } from "../../molecules/GanttChartTaskInfoBox";
+import classNames from "classnames";
 
 export type GanttChartType = {
   data?: GanttChartDataType;
@@ -13,6 +19,7 @@ export type GanttChartType = {
   height: number;
   rightPullEvent: (id: string, value: number) => void;
   leftPullEvent: (id: string, value: number) => void;
+  createDocument:(id:string)=>void
 };
 
 //todo мемоизировать дочерние компоненты, обязательно
@@ -23,8 +30,23 @@ export const GanttChart: React.FC<GanttChartType> = ({
   height,
   rightPullEvent,
   leftPullEvent,
+  createDocument
 }) => {
+  const [hoverItem, setHoverItem] = useState("");
+  const [activeItem, setActiveItem] = useState<GanttChartObjectType | null>(
+    null
+  );
+
+  const clickItemHandler = (id: string) =>
+    setActiveItem(data!.find((item) => item.id === id) || null);
+  const clearActive = () => setActiveItem(null);
+
+  const positionItems = createPositionMap(data!, config);
   const widthWrapper = (config.maxDay + 1) * config.dayStep;
+  const activeItemPosition = positionItems.get(
+    (activeItem && activeItem!.id) || ""
+  );
+
   return (
     <GanttChartPullItems
       leftPullEvent={leftPullEvent}
@@ -40,9 +62,8 @@ export const GanttChart: React.FC<GanttChartType> = ({
           />
           <main className={style.content}>
             <GanttChartArrowLayer
-              paths={createPathMap(data!, createPositionMap(data!, config))}
-              debugMode={true}
-              positionItems={createPositionMap(data!, config)}
+              activeId={hoverItem || (activeItem && activeItem.id) || ""}
+              paths={createPathMap(data!, positionItems)}
             />
 
             <ul className={style.list}>
@@ -51,6 +72,12 @@ export const GanttChart: React.FC<GanttChartType> = ({
                   <li
                     style={{ height: config.lineHeight }}
                     className={style.line}
+                    onMouseEnter={(e) => {
+                      setHoverItem(item.id);
+                    }}
+                    onMouseLeave={(e) => {
+                      setHoverItem("");
+                    }}
                   >
                     <ChartTask
                       id={item.id}
@@ -60,12 +87,34 @@ export const GanttChart: React.FC<GanttChartType> = ({
                       name={item.name}
                       startPosition={item.start * config.dayStep}
                       startDay={item.start}
+                      clickHandler={clickItemHandler}
                     />
                   </li>
                 ))}
             </ul>
+
+            <GanttChartTaskInfoBox
+              left={
+                activeItemPosition &&
+                activeItemPosition!.left + activeItemPosition!.width + 10
+              }
+              top={
+                activeItemPosition &&
+                activeItemPosition!.top + activeItemPosition!.height - 25
+              }
+              isActive={!!activeItem}
+              data={activeItem || data![0]}
+              allTask={data!}
+              createDocumentationHandler={createDocument}
+            />
           </main>
         </div>
+
+        <div
+          onClick={clearActive}
+          style={{ width: config.dayStep * config.maxDay + 1 }}
+          className={classNames(style.hiddenLayer, activeItem && style.active)}
+        />
       </div>
     </GanttChartPullItems>
   );

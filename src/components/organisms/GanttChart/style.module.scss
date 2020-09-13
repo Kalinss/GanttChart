@@ -44,6 +44,17 @@
     z-index: 2;
   }
 }
+.hiddenLayer{
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: none;
+  &.active{
+    display: block;
+  }
+}
 .list{
   width: 100%;
   height: 100%;
@@ -55,4 +66,13 @@
 
 .content{
   position: relative;
+}
+.infoItem{
+  position: absolute;
+  left: 0;
+  display: none;
+  top: 0;
+  &.active{
+    display: block;
+  }
 }
