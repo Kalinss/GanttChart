@@ -47,7 +47,7 @@ export const ChartTask: React.FC<ChartTaskData> = React.memo(({
           data-type="leftPull"
           data-start={startDay}
           data-duration={duration}
-        />
+        />  
         <p ref={textField} className={classNames(style.name,isProlapse&&style.absolute)}>{name}</p>
         <div
           className={classNames(style.pull, style.pullRight)}
