@@ -22,7 +22,7 @@ export type GanttChartType = {
   createDocument: (id: string) => void;
 };
 
-//todo мемоизировать дочерние компоненты, обязательно
+
 
 export const GanttChart: React.FC<GanttChartType> = ({
   data,
