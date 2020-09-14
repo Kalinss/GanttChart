@@ -19,7 +19,7 @@ export type GanttChartType = {
   height: number;
   rightPullEvent: (id: string, value: number) => void;
   leftPullEvent: (id: string, value: number) => void;
-  createDocument:(id:string)=>void
+  createDocument: (id: string) => void;
 };
 
 //todo мемоизировать дочерние компоненты, обязательно
@@ -30,12 +30,13 @@ export const GanttChart: React.FC<GanttChartType> = ({
   height,
   rightPullEvent,
   leftPullEvent,
-  createDocument
+  createDocument,
 }) => {
   const [hoverItem, setHoverItem] = useState("");
   const [activeItem, setActiveItem] = useState<GanttChartObjectType | null>(
     null
   );
+  const [dragMode, setDragMode] = useState(false);
 
   const clickItemHandler = (id: string) =>
     setActiveItem(data!.find((item) => item.id === id) || null);
@@ -49,33 +50,41 @@ export const GanttChart: React.FC<GanttChartType> = ({
 
   return (
     <GanttChartPullItems
+      allTask={data!}
       leftPullEvent={leftPullEvent}
       rightPullEvent={rightPullEvent}
       config={config}
+      getStatusDragMode={setDragMode}
     >
-      <div style={{ height: `${height}px` }} className={style.container}>
+      <div
+        style={{ height: `${height}px`}}
+        className={classNames(style.container, dragMode && style.notScroll)}
+      >
         <div style={{ width: widthWrapper }}>
           <GanttChartHeader
             type="zeroDay"
-            zeroDayConfig={{ maxDay: 55 }}
+            zeroDayConfig={{ maxDay: config.maxDay }}
             step={config.dayStep}
           />
           <main className={style.content}>
             <GanttChartArrowLayer
-              activeId={hoverItem || (activeItem && activeItem.id) || ""}
+              activeId={
+                dragMode ? "" : hoverItem || (activeItem && activeItem.id) || ""
+              }
               paths={createPathMap(data!, positionItems)}
             />
 
             <ul className={style.list}>
               {data &&
-                data.map((item) => (
+                data.map((item, i) => (
                   <li
+                    key={i + item.id}
                     style={{ height: config.lineHeight }}
                     className={style.line}
-                    onMouseEnter={(e) => {
+                    onMouseEnter={() => {
                       setHoverItem(item.id);
                     }}
-                    onMouseLeave={(e) => {
+                    onMouseLeave={() => {
                       setHoverItem("");
                     }}
                   >

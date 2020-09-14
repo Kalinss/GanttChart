@@ -9,7 +9,12 @@
   border: 1px solid #ccc;
   border-radius: 10px;
   flex-direction: column;
+  * {
+    user-select: none;
+  }
 }
+
+
 .axis {
   position: absolute;
   background-color: $color-chart-item;
@@ -44,35 +49,45 @@
     z-index: 2;
   }
 }
-.hiddenLayer{
+.hiddenLayer {
   position: absolute;
   z-index: 1;
   height: 100%;
   top: 0;
   left: 0;
   display: none;
-  &.active{
+  &.active {
     display: block;
   }
 }
-.list{
+.list {
   width: 100%;
   height: 100%;
 }
-.line{
+.line {
   display: flex;
   align-items: center;
 }
 
-.content{
+.content {
   position: relative;
 }
-.infoItem{
+.infoItem {
   position: absolute;
   left: 0;
   display: none;
   top: 0;
-  &.active{
+  &.active {
     display: block;
+  }
+}
+@media screen and (max-width: 1280px){
+  .container{
+    &.notScroll{
+      height: 100%;
+      overflow: hidden;
+      width: 100%;
+      position: fixed;
+    }
   }
 }
