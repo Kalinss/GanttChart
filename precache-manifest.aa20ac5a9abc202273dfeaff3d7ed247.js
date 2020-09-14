@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "893ad3dd4ceb2b49c3caaf2caad8015e",
+    "revision": "940d4aebc6b5c879de89625e39288af5",
     "url": "/gantt-chart/index.html"
   },
   {
-    "revision": "18c35881ea7a5fd8d4b3",
-    "url": "/gantt-chart/static/css/main.c3d4231c.chunk.css"
+    "revision": "185c0d9776dca84c455c",
+    "url": "/gantt-chart/static/css/main.6f7dfb78.chunk.css"
   },
   {
     "revision": "471612061a6316b94d36",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gantt-chart/static/js/2.ac460263.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "18c35881ea7a5fd8d4b3",
-    "url": "/gantt-chart/static/js/main.c00471e2.chunk.js"
+    "revision": "185c0d9776dca84c455c",
+    "url": "/gantt-chart/static/js/main.5582ea72.chunk.js"
   },
   {
     "revision": "66877b447bf88e7ded0c",

@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/gantt-chart/static/css/main.c3d4231c.chunk.css",
-    "main.js": "/gantt-chart/static/js/main.c00471e2.chunk.js",
-    "main.js.map": "/gantt-chart/static/js/main.c00471e2.chunk.js.map",
+    "main.css": "/gantt-chart/static/css/main.6f7dfb78.chunk.css",
+    "main.js": "/gantt-chart/static/js/main.5582ea72.chunk.js",
+    "main.js.map": "/gantt-chart/static/js/main.5582ea72.chunk.js.map",
     "runtime-main.js": "/gantt-chart/static/js/runtime-main.7abf5184.js",
     "runtime-main.js.map": "/gantt-chart/static/js/runtime-main.7abf5184.js.map",
     "static/js/2.ac460263.chunk.js": "/gantt-chart/static/js/2.ac460263.chunk.js",
     "static/js/2.ac460263.chunk.js.map": "/gantt-chart/static/js/2.ac460263.chunk.js.map",
     "index.html": "/gantt-chart/index.html",
-    "precache-manifest.c57063dfcb8bb5781d9b900ffa475ae3.js": "/gantt-chart/precache-manifest.c57063dfcb8bb5781d9b900ffa475ae3.js",
+    "precache-manifest.aa20ac5a9abc202273dfeaff3d7ed247.js": "/gantt-chart/precache-manifest.aa20ac5a9abc202273dfeaff3d7ed247.js",
     "service-worker.js": "/gantt-chart/service-worker.js",
-    "static/css/main.c3d4231c.chunk.css.map": "/gantt-chart/static/css/main.c3d4231c.chunk.css.map",
+    "static/css/main.6f7dfb78.chunk.css.map": "/gantt-chart/static/css/main.6f7dfb78.chunk.css.map",
     "static/js/2.ac460263.chunk.js.LICENSE.txt": "/gantt-chart/static/js/2.ac460263.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.7abf5184.js",
     "static/js/2.ac460263.chunk.js",
-    "static/css/main.c3d4231c.chunk.css",
-    "static/js/main.c00471e2.chunk.js"
+    "static/css/main.6f7dfb78.chunk.css",
+    "static/js/main.5582ea72.chunk.js"
   ]
 }
