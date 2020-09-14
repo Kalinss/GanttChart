@@ -29,7 +29,7 @@ Copy this project on your machine
 
 Open project and move to CatFood directory
 
-    cd ../CatFood
+    cd ../gantt-chart
 
 Download needed packages 
     

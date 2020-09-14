@@ -2,7 +2,7 @@
   "name": "gantt-chart",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://Kalinss.github.io/gantt-chart",
+  "homepage": "http://kalinss.github.io/gantt-chart",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
