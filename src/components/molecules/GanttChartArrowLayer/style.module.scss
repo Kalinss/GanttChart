@@ -20,5 +20,22 @@
 }
 
 .active{
+  opacity: 0;
   stroke: #210015;
+  animation-name: show;
+  animation-duration: 0.3s;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+}
+
+.disable{
+  display: none;
+}
+@keyframes show {
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
 }

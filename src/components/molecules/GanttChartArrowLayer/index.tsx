@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import style from "./style.module.scss";
 import {
   GanttChartArrowsPathType,
-  GanttChartPositionItemType,
 } from "../../../types";
 import classNames from "classnames";
 
@@ -11,6 +10,17 @@ export type GanttChartArrowLayerType = {
   activeId?: string;
 };
 
+const Line: React.FC<{ path: string; active: boolean }> = ({
+  path,
+  active,
+}) => {
+  return (
+    <polyline
+      className={classNames(style.arrow, active && style.active)}
+      points={path}
+    />
+  );
+};
 export const GanttChartArrowLayer: React.FC<GanttChartArrowLayerType> = ({
   paths,
   activeId = "",
@@ -19,14 +29,13 @@ export const GanttChartArrowLayer: React.FC<GanttChartArrowLayerType> = ({
     <div className={style.layer}>
       <svg xmlns="http://www.w3.org/2000/svg">
         {paths!.map((path) => (
-            <polyline
-              id={path[0] === activeId ? 'activeLine':'line'}
-              className={classNames(style.arrow, path[0] === activeId && style.active)}
-              points={path[path.length - 1]!}
-            />
-
+          <Line path={path[path.length - 1]} active={false} />
         ))}
-        <use xlinkHref="#activeLine"/>
+        {paths!
+          .filter((path) => path[0] === activeId)
+          .map((path) => (
+            <Line path={path[path.length - 1]} active={true} />
+          ))}
       </svg>
     </div>
   );
