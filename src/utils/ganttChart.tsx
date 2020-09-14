@@ -10,7 +10,7 @@ export const createPositionMap = (
   data: GanttChartDataType,
   config: GanttChartConfigType
 ) => {
-  const map = new Map();
+    const map = new Map();
   data.map((item, i) => {
     const top =
       i * config.lineHeight + (config.lineHeight - config.itemHeight) / 2;
@@ -27,7 +27,7 @@ export const createPositionMap = (
       height: height,
     });
   });
-  return map;
+    return map;
 };
 
 export const createPath = (
@@ -52,26 +52,22 @@ export const createPathMap = (
   return paths;
 };
 
-export const getDependenciesById = (
-  data: GanttChartDataType,
-  id: string
+export const getAllTaskWithItemInDependencies =(data: GanttChartDataType,id:string)=>{
+  return data.filter((item)=>item.dependencies.includes(id));
+};
+
+export const getArrayFieldById = (
+    data: GanttChartDataType,
+    field:"dependencies"|"parentTasks",
+    id: string
 ): GanttChartDataType | [] => {
   const object = data.find((item) => item.id === id);
-  const dependenciesList = object!.dependencies;
-  if (!dependenciesList!.length) return [];
-  return dependenciesList.map((item) => {
+  const list = object![field];
+  if (!list!.length) return [];
+  return list.map((item) => {
     return data.find((obj) => obj.id === item)!;
   });
 };
 
-export const getParentTasksById = (
-  data: GanttChartDataType,
-  id: string
-): GanttChartDataType | [] => {
-  const object = data.find((item) => item.id === id);
-  const parentTasks = object!.parentTasks;
-  if (!parentTasks!.length) return [];
-  return parentTasks.map((item) => {
-    return data.find((obj) => obj.id === item)!;
-  });
-};
+export const getALLEndPositionItem = (data:GanttChartDataType)=>data.map((item)=>item.start+item.duration);
+export const getAllStartFields = (data:GanttChartDataType)=>data.map((item)=>item.start);

@@ -3,7 +3,7 @@ import { GanttChart } from "./components/organisms/GanttChart";
 import { inputMock } from "./data/inputMock";
 import { reducer } from "./reducers/reducer";
 import action from "./reducers/constants";
-import { GanttChartTaskInfoBox } from "./components/molecules/GanttChartTaskInfoBox";
+
 
 function App() {
   const [state, dispatch] = useReducer(reducer, inputMock);
@@ -34,7 +34,7 @@ function App() {
         height={650}
         data={state}
         config={{
-          maxDay: 55,
+          maxDay: 88,
           dayStep: 30,
           itemHeight: 20,
           lineHeight: 35,

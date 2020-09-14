@@ -9,6 +9,7 @@
   color: white;
   position: relative;
   z-index: 10;
+  transition: width 0.2s ease;
 }
 .container {
   display: flex;
@@ -17,11 +18,22 @@
 }
 .name {
   color: inherit;
+  &.absolute{
+    position: absolute;
+    left: calc(100% + 5px);
+    top: 50%;
+    transform: translateY(-55%);
+    color: #210015;
+    text-wrap: unset;
+    width: max-content;
+    text-align: left;
+    word-wrap: unset;
+  }
 }
 .pull {
-  opacity: 0;
+  opacity: 1;
   background-color: #ddd;
-  width: 5px;
+  width: 6px;
   height: 100%;
   border-radius: 5px;
   position: absolute;
@@ -29,6 +41,16 @@
   transform: translateY(-50%);
   cursor: ew-resize;
   transition: all 0.3s ease;
+  &:before{
+    display: block;
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 20px;
+    height: 45px;
+  }
 }
 .pullLeft {
   left: 0;

@@ -4,8 +4,7 @@ import classNames from "classnames";
 import { GanttChartDataType, GanttChartObjectType } from "../../../types";
 import { LinkAsButton } from "../../atoms/LinkAsButton";
 import {
-  getDependenciesById,
-  getParentTasksById,
+    getArrayFieldById
 } from "../../../utils/ganttChart";
 
 export type GanttChartTaskInfoBoxType = {
@@ -70,10 +69,10 @@ export const GanttChartTaskInfoBox: React.FC<GanttChartTaskInfoBoxType> = ({
   createDocumentationHandler,
 }) => {
   const dependencies = data
-    ? getDependenciesById(allTask, data.id! || "")
+    ? getArrayFieldById(allTask,'dependencies', data.id! || "")
     : null;
 
-  const parentTasks = data ? getParentTasksById(allTask, data.id! || "") : null;
+  const parentTasks = data ? getArrayFieldById(allTask,'parentTasks', data.id! || "") : null;
 
   return (
     <>

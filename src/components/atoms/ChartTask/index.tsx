@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useRef,useEffect} from "react";
 import style from "./style.module.scss";
 import classNames from "classnames";
 
@@ -13,9 +13,8 @@ export type ChartTaskData = {
   clickHandler?: (id: string) => void;
 };
 
-export type pullEventType = (id: string, xPos: number) => void;
 
-export const ChartTask: React.FC<ChartTaskData> = ({
+export const ChartTask: React.FC<ChartTaskData> = React.memo(({
   name,
   startPosition,
   height,
@@ -25,7 +24,14 @@ export const ChartTask: React.FC<ChartTaskData> = ({
   id,
   clickHandler = () => {},
 }) => {
-  return (
+
+    const [isProlapse,setProlapse] = useState(false);
+
+    const textField = useRef<null|HTMLDivElement>(null);
+    useEffect(()=>{
+        setProlapse(width - textField.current!.clientWidth <20);
+    },[width]);
+    return (
     <div
       onClick ={()=>{clickHandler(id)}}
       style={{ transform: `translateX(${startPosition}px)` }}
@@ -42,7 +48,7 @@ export const ChartTask: React.FC<ChartTaskData> = ({
           data-start={startDay}
           data-duration={duration}
         />
-        <p className={style.name}>{name}</p>
+        <p ref={textField} className={classNames(style.name,isProlapse&&style.absolute)}>{name}</p>
         <div
           className={classNames(style.pull, style.pullRight)}
           data-id={id}
@@ -53,4 +59,4 @@ export const ChartTask: React.FC<ChartTaskData> = ({
       </div>
     </div>
   );
-};
+});
