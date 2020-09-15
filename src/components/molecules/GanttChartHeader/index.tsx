@@ -30,8 +30,8 @@ export const GanttChartHeader: React.FC<GanttChartHeaderType> = ({
             <h2>Количество требуемых дней</h2>
           </div>
           <ul className={style.bottom}>
-            {createArrayFrom0To(zeroDayConfig!.maxDay).map((item) => (
-              <li className={style.itemBottom} style={{ width: step }}>
+            {createArrayFrom0To(zeroDayConfig!.maxDay).map((item,i) => (
+              <li key={i} className={style.itemBottom} style={{ width: step }}>
                 {<span>{item}</span>}
               </li>
             ))}

@@ -3,9 +3,7 @@ import style from "./style.module.scss";
 import classNames from "classnames";
 import { GanttChartDataType, GanttChartObjectType } from "../../../types";
 import { LinkAsButton } from "../../atoms/LinkAsButton";
-import {
-    getArrayFieldById
-} from "../../../utils/ganttChart";
+import { getArrayFieldById } from "../../../utils/ganttChart";
 
 export type GanttChartTaskInfoBoxType = {
   left: number;
@@ -43,8 +41,9 @@ const InfoList: React.FC<{
         <li className={style.item}>
           <span>{name}</span>
           <ul>
-            {data.map((item) => (
+            {data.map((item, i) => (
               <li
+                key={item.id + i}
                 className={classNames(
                   style.dependence,
                   !currentItem.isTask && (item.isReady ? readyClass : notReady)
@@ -69,10 +68,12 @@ export const GanttChartTaskInfoBox: React.FC<GanttChartTaskInfoBoxType> = ({
   createDocumentationHandler,
 }) => {
   const dependencies = data
-    ? getArrayFieldById(allTask,'dependencies', data.id! || "")
+    ? getArrayFieldById("dependencies", data.id! || "", allTask)
     : null;
 
-  const parentTasks = data ? getArrayFieldById(allTask,'parentTasks', data.id! || "") : null;
+  const parentTasks = data
+    ? getArrayFieldById("parentTasks", data.id! || "", allTask)
+    : null;
 
   return (
     <>

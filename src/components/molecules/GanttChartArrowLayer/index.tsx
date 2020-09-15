@@ -28,13 +28,17 @@ export const GanttChartArrowLayer: React.FC<GanttChartArrowLayerType> = ({
   return (
     <div className={style.layer}>
       <svg xmlns="http://www.w3.org/2000/svg">
-        {paths!.map((path) => (
+        {paths!.map((path,i) => (
+            <g key={i}>
           <Line path={path[path.length - 1]} active={false} />
+            </g>
         ))}
         {paths!
           .filter((path) => path[0] === activeId)
-          .map((path) => (
+          .map((path,i) => (
+              <g key={i}>
             <Line path={path[path.length - 1]} active={true} />
+              </g>
           ))}
       </svg>
     </div>

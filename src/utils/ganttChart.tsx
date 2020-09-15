@@ -5,12 +5,13 @@ import {
   GanttChartPositionItemType,
 } from "../types";
 import { bottomToLeftPattern } from "./ganttChartArrowPatterns";
+import { curry } from "lodash";
 
 export const createPositionMap = (
   data: GanttChartDataType,
   config: GanttChartConfigType
 ) => {
-    const map = new Map();
+  const map = new Map();
   data.map((item, i) => {
     const top =
       i * config.lineHeight + (config.lineHeight - config.itemHeight) / 2;
@@ -27,7 +28,7 @@ export const createPositionMap = (
       height: height,
     });
   });
-    return map;
+  return map;
 };
 
 export const createPath = (
@@ -52,22 +53,52 @@ export const createPathMap = (
   return paths;
 };
 
-export const getAllTaskWithItemInDependencies =(data: GanttChartDataType,id:string)=>{
-  return data.filter((item)=>item.dependencies.includes(id));
+export const getAllTaskWithItemInDependencies = curry(
+  (id: string, data: GanttChartDataType) => {
+    return data.filter((item) => item.dependencies.includes(id));
+  }
+);
+
+export const getArrayFieldById = curry(
+  (
+    field: "dependencies" | "parentTasks",
+    id: string,
+    data: GanttChartDataType
+  ): GanttChartDataType | [] => {
+    const object = data.find((item) => item.id === id);
+    const list = object![field];
+    if (!list!.length) return [];
+    return list.map((item) => {
+      return data.find((obj) => obj.id === item)!;
+    });
+  }
+);
+
+export const getALLEndPositionItem = (data: GanttChartDataType) =>
+  data.map((item) => item.start + item.duration);
+export const getAllStartPositionItems = (data: GanttChartDataType) =>
+  data.map((item) => item.start);
+
+export const getAllDependenciesItemsById = (
+  data: GanttChartDataType,
+  itemId: string,
+  type: "dependencies" | "parentTasks"
+) => {
+  const result: string[] = [];
+  const f = (data: GanttChartDataType, startId: string) => {
+    const obj = data.find((item) => item.id === startId);
+    const dep = obj![type];
+    result.push(...dep);
+    if (dep.length === 0) return;
+    dep.map((item) => f(data, item));
+  };
+  f(data, itemId);
+  // @ts-ignore
+  return [...new Set<string[]>(result)];
 };
 
-export const getArrayFieldById = (
-    data: GanttChartDataType,
-    field:"dependencies"|"parentTasks",
-    id: string
-): GanttChartDataType | [] => {
-  const object = data.find((item) => item.id === id);
-  const list = object![field];
-  if (!list!.length) return [];
-  return list.map((item) => {
-    return data.find((obj) => obj.id === item)!;
-  });
+export const getAllObjectInDataById = (data:GanttChartDataType,id:string[])=>{
+  return id.map((id)=>data.filter((item)=>item.id === id)).flat(Infinity);
 };
 
-export const getALLEndPositionItem = (data:GanttChartDataType)=>data.map((item)=>item.start+item.duration);
-export const getAllStartFields = (data:GanttChartDataType)=>data.map((item)=>item.start);
+

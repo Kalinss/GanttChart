@@ -10,6 +10,7 @@ export type ChartTaskData = {
   duration: number;
   id: string;
   startDay: number;
+  isTask:boolean;
   clickHandler?: (id: string) => void;
 };
 
@@ -22,6 +23,7 @@ export const ChartTask: React.FC<ChartTaskData> = React.memo(({
   duration,
   startDay,
   id,
+  isTask,
   clickHandler = () => {},
 }) => {
 
@@ -46,6 +48,7 @@ export const ChartTask: React.FC<ChartTaskData> = React.memo(({
           data-id={id}
           data-type="leftPull"
           data-start={startDay}
+          data-task={isTask}
           data-duration={duration}
         />  
         <p ref={textField} className={classNames(style.name,isProlapse&&style.absolute)}>{name}</p>
@@ -53,6 +56,7 @@ export const ChartTask: React.FC<ChartTaskData> = React.memo(({
           className={classNames(style.pull, style.pullRight)}
           data-id={id}
           data-type="rightPull"
+          data-task={isTask}
           data-start={startDay}
           data-duration={duration}
         />

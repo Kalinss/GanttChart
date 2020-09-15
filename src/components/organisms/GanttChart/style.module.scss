@@ -84,10 +84,7 @@
 @media screen and (max-width: 1279px){
   .container{
     &.notScroll{
-      height: 100%;
       overflow: hidden;
-      width: 100%;
-      position: fixed;
     }
   }
 }

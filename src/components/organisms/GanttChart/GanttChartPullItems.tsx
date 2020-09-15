@@ -1,15 +1,25 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { throttle } from "lodash";
-import { GanttChartConfigType, GanttChartDataType } from "../../../types";
 import {
-  getAllStartFields,
-  getArrayFieldById,
+  GanttChartConfigType,
+  GanttChartDataType,
+  mixTouchEvent,
+  pullEvent,
+} from "../../../types";
+import {
   getALLEndPositionItem,
+  getAllDependenciesItemsById,
+  getAllStartPositionItems,
   getAllTaskWithItemInDependencies,
+  getArrayFieldById,
+  getAllObjectInDataById,
 } from "../../../utils/ganttChart";
 import { maxNumber, minNumber } from "../../../utils/other";
-
-
+import {
+  createDraggableObject,
+  getPositionEvent,
+} from "../../../utils/positionElements";
+import { compose } from "lodash/fp";
 
 export type GanttChartPullItemsType = {
   rightPullEvent: (id: string, value: number) => void;
@@ -18,11 +28,9 @@ export type GanttChartPullItemsType = {
   getStatusDragMode: (st: boolean) => void;
   allTask: GanttChartDataType;
 };
-export type mouseEvent = React.MouseEvent<HTMLDivElement, MouseEvent>;
-export type touchEvent = React.TouchEvent<HTMLDivElement>;
 
-export const mouseEventHandler = (fn: (e: mouseEvent | touchEvent) => void) => (
-  e: mouseEvent | touchEvent
+export const mouseEventHandler = (fn: (e: mixTouchEvent) => void) => (
+  e: mixTouchEvent
 ) => {
   e.persist();
   e.preventDefault();
@@ -32,21 +40,51 @@ export const mouseEventHandler = (fn: (e: mouseEvent | touchEvent) => void) => (
 export const neededUpdatePosition = (position: number, step: number) =>
   position >= step;
 
-const getPositionX = (e:mouseEvent|touchEvent)=>{
-  if(e.type === 'touchstart' || e.type === 'touchend' || e.type==='touchmove' ){
-    return (e as touchEvent).touches[0].clientX;
-  }
-  return (e as mouseEvent).clientX;
+export const maxPositionByParentItems = (
+  data: GanttChartDataType,
+  idTargetItem: string
+) => {
+  return compose(
+    maxNumber,
+    getALLEndPositionItem,
+    getAllTaskWithItemInDependencies(idTargetItem)
+  )(data);
 };
 
-export const createDraggableObject = (e: mouseEvent | touchEvent) => {
-  const target = e.target as HTMLDivElement;
-  return {
-    id: target.dataset.id,
-    posX: getPositionX(e),
-    duration: target.dataset.duration,
-    start: target.dataset.start,
-  };
+export const isConfront = (pos1: number, pos2: number) => pos1 - pos2 === 0;
+
+export const minPositionByDependenciesItems = (
+  data: GanttChartDataType,
+  idTargetItem: string
+) => {
+  return compose(
+    minNumber,
+    getAllStartPositionItems,
+    getArrayFieldById("dependencies", idTargetItem)
+  )(data);
+};
+
+export const getMaxPositionAdjacentElements = (
+  data: GanttChartDataType,
+  idDependencies: string[],
+  draggObject: any
+) => {
+  const confrontObject = getAllObjectInDataById(data, idDependencies).filter(
+    (item) => item.start === draggObject.start + draggObject.duration
+  );
+
+  const parentItems = getArrayFieldById(
+    "parentTasks",
+    confrontObject[0].id,
+    data
+    //@ts-ignore
+  ).filter((item) => item.id !== draggObject.id);
+
+  const maxPosition = maxNumber(
+    //@ts-ignore
+    parentItems.map((item) => item.start + item.duration)
+  );
+  return maxPosition;
 };
 
 export const GanttChartPullItems: React.FC<GanttChartPullItemsType> = ({
@@ -58,14 +96,37 @@ export const GanttChartPullItems: React.FC<GanttChartPullItemsType> = ({
   allTask,
 }) => {
   const [dragObject, setDragObject] = useState<any>(null);
-  const [dragMode, setDragMode] = useState<"leftPull" | "rightPull" | null>(
-    null
-  );
+  const [dragMode, setDragMode] = useState<pullEvent | null>(null);
   const [minStartPosition, setStartPosition] = useState(0);
   const [maxEndPosition, setMaxPosition] = useState(0);
 
-
   const pullEvent = {
+    allRightTaskPullRight: (id: string[], data: GanttChartDataType) => {
+      id.map((itemId) => {
+        const obj = data.find((item) => item.id == itemId);
+        leftPullEvent(itemId, obj!.start + 1);
+      });
+      setDragObject({
+        ...dragObject,
+        posX: +dragObject.posX + config.dayStep,
+        duration: +dragObject.duration + 1,
+      });
+      setStartPosition(minPositionByDependenciesItems(data, dragObject.id) + 1);
+    },
+
+    allRightTaskPullLeft: (id: string[], data: GanttChartDataType) => {
+      id.map((itemId) => {
+        const obj = data.find((item) => item.id == itemId);
+        leftPullEvent(itemId, obj!.start - 1);
+      });
+      setDragObject({
+        ...dragObject,
+        posX: +dragObject.posX + config.dayStep,
+        duration: +dragObject.duration - 1,
+      });
+      setStartPosition(minPositionByDependenciesItems(data, dragObject.id) - 1);
+    },
+
     leftHandlePullRight: () => {
       leftPullEvent(dragObject.id, +dragObject.start + 1);
       rightPullEvent(dragObject.id, +dragObject.duration - 1);
@@ -104,27 +165,19 @@ export const GanttChartPullItems: React.FC<GanttChartPullItemsType> = ({
     },
   };
 
-  const mouseDownTouchStartEventHandler = (e: mouseEvent | touchEvent) => {
+  const mouseDownTouchStartEventHandler = (e: mixTouchEvent) => {
     const target = e.target as HTMLElement;
     const type = (e.target as HTMLElement).dataset.type;
-
     if (type === "rightPull" || type === "leftPull") {
       setDragObject(createDraggableObject(e));
       setDragMode(type);
       getStatusDragMode(true);
       setStartPosition(
-        minNumber(
-          getAllStartFields(
-            getArrayFieldById(allTask, "dependencies", target!.dataset!.id!)
-          )
-        ) || config.maxDay
+        minPositionByDependenciesItems(allTask, target!.dataset!.id!) ||
+          config.maxDay
       );
       setMaxPosition(
-        maxNumber(
-          getALLEndPositionItem(
-            getAllTaskWithItemInDependencies(allTask, target!.dataset!.id!)
-          )
-        ) || 0
+        maxPositionByParentItems(allTask, target!.dataset!.id!) || 0
       );
     }
   };
@@ -135,32 +188,78 @@ export const GanttChartPullItems: React.FC<GanttChartPullItemsType> = ({
     getStatusDragMode(false);
   };
 
-  const isPullRight = (e: mouseEvent | touchEvent) =>
-    neededUpdatePosition(getPositionX(e) - dragObject.posX, config.dayStep);
-  const isPullLeft = (e: mouseEvent | touchEvent) =>
-    neededUpdatePosition(dragObject.posX - getPositionX(e), config.dayStep);
+  const isPullRight = (e: mixTouchEvent) =>
+    neededUpdatePosition(
+      getPositionEvent(e, "clientX") - dragObject.posX,
+      config.dayStep
+    );
+  const isPullLeft = (e: mixTouchEvent) =>
+    neededUpdatePosition(
+      dragObject.posX - getPositionEvent(e, "clientX"),
+      config.dayStep
+    );
 
-  const mouseMoveTouchMove = (e: mouseEvent|touchEvent) => {
+  const mouseMoveTouchMove = (e: mixTouchEvent) => {
     if (!dragObject || !dragMode) return;
     switch (dragMode) {
       case "rightPull": {
         if (isPullLeft(e)) {
           if (dragObject.duration === 1) return;
+
+          if (dragObject.isDoc) {
+            if (
+              isConfront(
+                minStartPosition,
+                dragObject.duration + dragObject.start
+              )
+            ) {
+
+              const id = getAllDependenciesItemsById(
+                allTask,
+                dragObject.id,
+                "dependencies"
+              );
+
+              const maxPositionAdjacent = getMaxPositionAdjacentElements(
+                allTask,
+                id,
+                dragObject
+              );
+
+              if (dragObject.start + dragObject.duration === maxPositionAdjacent){
+                pullEvent.rightHandlePullLeft();
+                return;
+              }
+              pullEvent.allRightTaskPullLeft(id, allTask);
+            }
+          }
           pullEvent.rightHandlePullLeft();
         }
         if (isPullRight(e)) {
           if (
-            minStartPosition - (+dragObject.duration + +dragObject.start) ==
-            0
-          )
-            return;
+            isConfront(minStartPosition, dragObject.duration + dragObject.start)
+          ) {
+            if (dragObject.isDoc) {
+              const id = getAllDependenciesItemsById(
+                allTask,
+                dragObject.id,
+                "dependencies"
+              );
+              pullEvent.allRightTaskPullRight(id, allTask);
+            } else {
+              return;
+            }
+          }
           pullEvent.rightHandlePullRight();
         }
         break;
       }
+
       case "leftPull": {
         if (isPullLeft(e)) {
-          if (+dragObject.start - maxEndPosition == 0) return;
+          if (dragObject.start - maxEndPosition == 0) {
+            return;
+          }
           pullEvent.leftHandlePullLeft();
         }
         if (isPullRight(e)) {
@@ -175,11 +274,10 @@ export const GanttChartPullItems: React.FC<GanttChartPullItemsType> = ({
   };
   return (
     <div
-      style={{ cursor: dragMode ? "ew-resize" : "auto" }}
+      style={{ cursor: dragMode ? "ew-resize" : "auto",position:'relative' }}
       onMouseDown={mouseDownTouchStartEventHandler}
       onMouseUp={mouseUpTouchEndEventHandler}
       onMouseMove={mouseEventHandler(throttle(mouseMoveTouchMove, 10))}
-
       onTouchStart={mouseDownTouchStartEventHandler}
       onTouchEnd={mouseUpTouchEndEventHandler}
       onTouchMove={mouseEventHandler(throttle(mouseMoveTouchMove, 10))}

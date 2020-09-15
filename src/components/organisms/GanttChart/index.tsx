@@ -96,6 +96,7 @@ export const GanttChart: React.FC<GanttChartType> = ({
                       name={item.name}
                       startPosition={item.start * config.dayStep}
                       startDay={item.start}
+                      isTask={item.isTask}
                       clickHandler={clickItemHandler}
                     />
                   </li>

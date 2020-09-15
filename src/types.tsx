@@ -1,3 +1,5 @@
+import React from "react";
+
 export type GanttChartObjectType = {
     id: string;
     name: string;
@@ -29,3 +31,8 @@ export type GanttChartPositionItemType = {
 export type GanttChartArrowsPathType = string[][]
 export type GanttChartItemPositionMapType = Map<string,
     GanttChartPositionItemType>;
+
+export type mouseEvent = React.MouseEvent<HTMLDivElement, MouseEvent>;
+export type touchEvent = React.TouchEvent<HTMLDivElement>;
+export type mixTouchEvent = mouseEvent & touchEvent;
+export type pullEvent = "rightPull" | "leftPull";
