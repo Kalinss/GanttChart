@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "869b65088977040bbe4fac40e2e731ec",
+    "revision": "53d20d68fcd1688dc86d5a1df91d9f51",
     "url": "/gantt-chart/index.html"
   },
   {
-    "revision": "3022512193e2bc9f380e",
+    "revision": "bb6bcae7f5fda76bc67b",
     "url": "/gantt-chart/static/css/main.3e6480b5.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gantt-chart/static/js/2.94d85eed.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "3022512193e2bc9f380e",
-    "url": "/gantt-chart/static/js/main.2de70a53.chunk.js"
+    "revision": "bb6bcae7f5fda76bc67b",
+    "url": "/gantt-chart/static/js/main.9cf2d8dc.chunk.js"
   },
   {
     "revision": "66877b447bf88e7ded0c",
